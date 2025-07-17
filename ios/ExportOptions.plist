@@ -1,34 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
-  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>method</key>
-    <string>enterprise</string>
-
-    <key>signingStyle</key>
-    <string>manual</string>
-
-    <key>compileBitcode</key>
-    <false/>
-
-    <key>stripSwiftSymbols</key>
-    <true/>
-
-    <key>destination</key>
-    <string>export</string>
-
-    <key>teamID</key>
-    <string>3ECT984B8J</string>
-
-    <key>provisioningProfiles</key>
-    <dict>
-        <key>com.mobilestyx.iPruAtomEnterprise</key>
-        <string>use_this_for_¡PruAtom_live</string>
-    </dict>
-
-     <key>signingCertificate</key>
+  <key>method</key>
+  <string>enterprise</string>
+  <key>signingStyle</key>
+  <string>manual</string>
+  <key>stripSwiftSymbols</key>
+  <true/>
+  <key>compileBitcode</key>
+  <false/>
+  <key>destination</key>
+  <string>export</string>
+  <key>teamID</key>
+  <string>3ECT984B8J</string>
+  <key>signingCertificate</key>
   <string>iPhone Distribution: ICICI PRUDENTIAL LIFE INSURANCE COMPANY LIMITED</string>
-
+  <key>provisioningProfiles</key>
+  <dict>
+    <key>com.mobilestyx.iPruAtomEnterprise</key>
+    <string>use_this_for_¡PruAtom_live</string>
+  </dict>
 </dict>
 </plist>
