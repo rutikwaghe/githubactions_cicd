@@ -26,5 +26,9 @@
         <key>com.mobilestyx.iPruAtomEnterprise</key>
         <string>use_this_for_¡PruAtom_live</string>
     </dict>
+
+     <key>signingCertificate</key>
+  <string>iPhone Distribution: ICICI PRUDENTIAL LIFE INSURANCE COMPANY LIMITED</string>
+
 </dict>
 </plist>
