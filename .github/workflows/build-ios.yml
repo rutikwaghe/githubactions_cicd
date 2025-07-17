@@ -7,7 +7,9 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-latest  # or `macos-latest` if you're OK with latest Xcode/macOS
+
+    timeout-minutes: 30  # Optional timeout to prevent infinite builds
 
     steps:
       - name: Checkout code
@@ -28,28 +30,27 @@ jobs:
 
       - name: Setup code signing (cert + profile)
         run: |
-          # Create provisioning profile directory
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
-          # Decode and save certificate
           echo "${{ secrets.IOS_CERT_BASE64 }}" | base64 --decode > dist.p12
-
-          # Decode and save provisioning profile
           echo "${{ secrets.IOS_PROVISION_BASE64 }}" | base64 --decode > profile.mobileprovision
 
-          # Extract UUID and move provisioning profile
           UUID=$(grep -aA1 UUID profile.mobileprovision | grep -io "[-A-F0-9]\{36\}" | head -1)
           mv profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
 
-          # Create and unlock keychain
           security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" ios-build.keychain
           security default-keychain -s ios-build.keychain
           security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" ios-build.keychain
           security import dist.p12 -k ios-build.keychain -P "${{ secrets.IOS_CERT_PASSWORD }}" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" ios-build.keychain
 
+      - name: Debug Code Signing Identities
+        run: |
+          security find-identity -v -p codesigning
+
       - name: Build and Export .ipa
         run: |
+          set -x
           cd ios
 
           xcodebuild \
@@ -74,6 +75,7 @@ jobs:
         with:
           name: ios-enterprise-ipa
           path: ios/build/export/*.ipa
+
 
 
 
