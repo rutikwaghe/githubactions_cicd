@@ -3,7 +3,9 @@ pipeline {
 
   environment {
     NODE_HOME = tool name: 'NodeJS 18', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-    PATH = "${NODE_HOME}/bin:$PATH"
+    JAVA_HOME = '/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home'
+    ANDROID_HOME = "${HOME}/Library/Android/sdk"
+    PATH = "${NODE_HOME}/bin:$JAVA_HOME/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH"
   }
 
   tools {
@@ -11,6 +13,7 @@ pipeline {
   }
 
   stages {
+
     stage('Checkout') {
       steps {
         git 'https://github.com/rutikwaghe/githubactions_cicd.git'
@@ -25,7 +28,10 @@ pipeline {
 
     stage('Build Android') {
       steps {
-        sh './android/gradlew assembleRelease -p android'
+        sh '''
+          chmod +x android/gradlew
+          ./android/gradlew assembleRelease -p android
+        '''
       }
     }
 
