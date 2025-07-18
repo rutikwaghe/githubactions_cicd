@@ -1,43 +1,63 @@
 pipeline {
   agent any
 
+  tools {
+    nodejs 'NodeJS 18' // Make sure this matches exactly in Jenkins global tools
+  }
+
+  environment {
+    ANDROID_HOME = "${env.HOME}/Library/Android/sdk"
+    PATH = "${env.PATH}:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/cmdline-tools/latest/bin"
+  }
+
   stages {
-    stage('Checkout') {
+
+    stage('Checkout Code') {
       steps {
-        git 'https://github.com/rutikwaghe/githubactions_cicd.git'
+        git branch: 'main', url: 'https://github.com/rutikwaghe/githubactions_cicd.git'
       }
     }
 
     stage('Install Dependencies') {
       steps {
+        echo '📦 Installing node_modules...'
         sh 'npm install'
       }
     }
 
-    stage('Build Android') {
+    stage('Clean & Build APK') {
       steps {
+        echo '🏗️ Building release APK...'
         sh '''
-          echo ">>> Making gradlew executable"
-          chmod +x android/gradlew
-
-          echo ">>> Starting APK build"
           cd android
+          chmod +x ./gradlew
           ./gradlew clean
-          ./gradlew assembleRelease --stacktrace
+          ./gradlew assembleRelease --no-daemon --stacktrace
         '''
       }
     }
 
-    stage('Verify APK') {
+    stage('List APK') {
       steps {
-        sh 'ls -l android/app/build/outputs/apk/release/'
+        echo '📁 Listing built APKs...'
+        sh 'ls -lh android/app/build/outputs/apk/release/'
       }
     }
 
     stage('Archive APK') {
       steps {
+        echo '📦 Archiving the APK...'
         archiveArtifacts artifacts: 'android/app/build/outputs/apk/release/app-release.apk', fingerprint: true
       }
+    }
+  }
+
+  post {
+    success {
+      echo '✅ APK build successful!'
+    }
+    failure {
+      echo '❌ Build failed. Please check the logs.'
     }
   }
 }
