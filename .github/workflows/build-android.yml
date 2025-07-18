@@ -13,14 +13,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 17
 
+      - name: Setup Gradle Cache
+        uses: gradle/actions/setup-gradle@v3
+
       - name: Install dependencies
         run: yarn install
+
+      - name: Run Unit Tests
+        run: yarn test --ci --coverage
 
       - name: Decode keystore from base64
         run: |
@@ -57,44 +68,11 @@ jobs:
           path: android/app/build/outputs/bundle/release/*.aab
 
 
-
-# name: Build Android App
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   build:
-#     runs-on: macos-latest
-
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
-
-#       - name: Install dependencies
-#         run: yarn install
-
-#       - name: Build Android APK
-#         run: |
-#           cd android
-#           ./gradlew clean
-#           ./gradlew assembleRelease
-
-#       - name: Build Android AAB
-#         run: |
-#           cd android
-#           ./gradlew bundleRelease
-
-#       - name: Upload APK Release
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: apk-release
-#           path: android/app/build/outputs/apk/release/*.apk
-
-#       - name: Upload AAB Release
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: aab-release
-#           path: android/app/build/outputs/bundle/release/*.aab
+      - name: Upload AAB to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: testers
+          releaseNotes: "Automated release from GitHub Actions"
+          file: android/app/build/outputs/bundle/release/app-release.aab

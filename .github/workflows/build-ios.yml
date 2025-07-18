@@ -7,9 +7,9 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest  # or `macos-latest` if you're OK with latest Xcode/macOS
+    runs-on: macos-latest
 
-    timeout-minutes: 30  # Optional timeout to prevent infinite builds
+    timeout-minutes: 30
 
     steps:
       - name: Checkout code

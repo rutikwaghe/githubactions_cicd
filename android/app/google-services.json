@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "513137380625",
+    "project_id": "otagithubactions",
+    "storage_bucket": "otagithubactions.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513137380625:android:2c62479db9ad26094bd0b0",
+        "android_client_info": {
+          "package_name": "com.otagithubactions"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdwUmFfMJfOm1Q3zKWLmSFyyZbb1Vl07M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
